@@ -12,7 +12,7 @@ import jxl.write.Number;
 
 public class genererExcel {
     private static final String EXCEL__FILE__LOCATION = "C:\\Users\\Bastien Audu\\Documents\\excel.xls";
-    public static void SIR(ArrayList<Integer> S, ArrayList<Integer> I, ArrayList<Integer> R) {
+    public static void SIR(ArrayList<Float> S, ArrayList<Float> I, ArrayList<Float> R) {
 
 
 

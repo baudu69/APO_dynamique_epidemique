@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class SIR {
     //Nbr de personnes saines
-    private ArrayList<Integer> S;
+    private ArrayList<Float> S;
     //Nbr de personnes Infectés
-    private ArrayList<Integer> I;
+    private ArrayList<Float> I;
     //Nbr de personnes guéris ou mortes
-    private ArrayList<Integer> R;
+    private ArrayList<Float> R;
 
     //Probabilité d'infecter quelq'un
     private float beta;
@@ -20,20 +20,20 @@ public class SIR {
     private int tempsSimulation;
 
     /**
-     * @param S Nbr de personnes saines
-     * @param I Nbr de personnes Infectés
-     * @param R Nbr de personnes guéris ou mortes
+     * @param S Taux de personnes saines
+     * @param I Taux de personnes Infectés
+     * @param R Taux de personnes guéris ou mortes
      * @param beta Probabilité d'infecter quelq'un
      * @param gamma probabilité de ne plus être infecté
      * @param tempsSimulation Temps de la simulation en Jours
      */
-    public SIR(int S, int I, int R, float beta, float gamma, int tempsSimulation) {
-        this.S = new ArrayList<Integer>();
-        this.I = new ArrayList<Integer>();
-        this.R = new ArrayList<Integer>();
-        this.S.add(S);
+    public SIR(float I, float beta, float gamma, int tempsSimulation) {
+        this.S = new ArrayList<Float>();
+        this.I = new ArrayList<Float>();
+        this.R = new ArrayList<Float>();
+        this.S.add(1-I);
         this.I.add(I);
-        this.R.add(R);
+        this.R.add(0f);
         this.beta = beta;
         this.gamma = gamma;
         this.tempsSimulation = tempsSimulation;
@@ -44,22 +44,21 @@ public class SIR {
      */
     private void simuler() {
         for (int temps=0; temps<getTempsSimulation(); temps++) {
-            int nbPersonnesDeSaI = (int) (getBeta()*getS().get(temps)*getI().get(temps));
-            if (nbPersonnesDeSaI > getS().get(temps)) nbPersonnesDeSaI = getS().get(temps);
-            int nbPersonnesDeIaR = (int) (getGamma()*getI().get(temps));
+            float tauxPersonnesDeSaI = (getBeta()*getS().get(temps)*getI().get(temps));
+            float tauxPersonnesDeIaR = (getGamma()*getI().get(temps));
 
-            getS().add((getS().get(temps) - nbPersonnesDeSaI));
-            getI().add((getI().get(temps) + nbPersonnesDeSaI - nbPersonnesDeIaR));
-            getR().add((getR().get(temps) + nbPersonnesDeIaR));
+            getS().add((getS().get(temps) - tauxPersonnesDeSaI));
+            getI().add((getI().get(temps) + tauxPersonnesDeSaI - tauxPersonnesDeIaR));
+            getR().add((getR().get(temps) + tauxPersonnesDeIaR));
         }
     }
 
     /**
      * @return listeValeurs : un tableau composé des tableaux S, I et R
      */
-    public ArrayList<ArrayList<Integer>> LancerSimulation() {
+    public ArrayList<ArrayList<Float>> LancerSimulation() {
         simuler();
-        ArrayList<ArrayList<Integer>> listeValeurs = new ArrayList<>();
+        ArrayList<ArrayList<Float>> listeValeurs = new ArrayList<>();
         listeValeurs.add(getS());
         listeValeurs.add(getI());
         listeValeurs.add(getR());
@@ -70,42 +69,42 @@ public class SIR {
     /**
      * @return S
      */
-    public ArrayList<Integer> getS() {
+    public ArrayList<Float> getS() {
         return S;
     }
 
     /**
      * @param s
      */
-    protected void setS(ArrayList<Integer> s) {
+    protected void setS(ArrayList<Float> s) {
         S = s;
     }
 
     /**
      * @return I
      */
-    public ArrayList<Integer> getI() {
+    public ArrayList<Float> getI() {
         return I;
     }
 
     /**
      * @param i
      */
-    protected void setI(ArrayList<Integer> i) {
+    protected void setI(ArrayList<Float> i) {
         I = i;
     }
 
     /**
      * @return R
      */
-    public ArrayList<Integer> getR() {
+    public ArrayList<Float> getR() {
         return R;
     }
 
     /**
      * @param r
      */
-    protected void setR(ArrayList<Integer> r) {
+    protected void setR(ArrayList<Float> r) {
         R = r;
     }
 

@@ -1,3 +1,4 @@
+/*
 package Simple;
 
 import java.util.ArrayList;
@@ -9,7 +10,8 @@ public class SEIR extends SIR {
     //Probabilité d'avoir fini l'incubation
     private float alpha;
 
-    /**
+    */
+/**
      * @param S               Nbr de personnes saines
      * @param E               Nombre de personnes en incubation
      * @param I               Nbr de personnes Infectés
@@ -18,7 +20,8 @@ public class SEIR extends SIR {
      * @param alpha           Probabilité d'avoir fini l'incubation
      * @param gamma           probabilité de ne plus être infecté
      * @param tempsSimulation Temps de la simulation en Jours
-     */
+     *//*
+
     public SEIR(int S, int E, int I, int R, float beta, float alpha, float gamma, int tempsSimulation) {
         super(S, I, R, beta, gamma, tempsSimulation);
         this.E = new ArrayList<>();
@@ -26,9 +29,11 @@ public class SEIR extends SIR {
         this.alpha = alpha;
     }
 
-    /**
+    */
+/**
      * Effectue la simulation
-     */
+     *//*
+
     private void simuler() {
         for (int temps=0; temps<getTempsSimulation(); temps++) {
             int nbPersonnesDeSaE = (int) (getBeta()*getS().get(temps)*getI().get(temps));
@@ -43,9 +48,11 @@ public class SEIR extends SIR {
         }
     }
 
-    /**
+    */
+/**
      * @return listeValeurs : un tableau composé des tableaux S, E, I et R
-     */
+     *//*
+
     public ArrayList<ArrayList<Integer>> LancerSimulation() {
         simuler();
         ArrayList<ArrayList<Integer>> listeValeurs = new ArrayList<>();
@@ -72,3 +79,4 @@ public class SEIR extends SIR {
         this.alpha = alpha;
     }
 }
+*/

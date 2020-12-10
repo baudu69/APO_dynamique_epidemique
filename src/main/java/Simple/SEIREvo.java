@@ -1,3 +1,4 @@
+/*
 package Simple;
 
 import java.util.ArrayList;
@@ -10,7 +11,8 @@ public class SEIREvo extends SEIR {
 
     private int nbPersTotal;
 
-    /**
+    */
+/**
      * @param S               Nbr de personnes saines
      * @param E               Nombre de personnes en incubation
      * @param I               Nbr de personnes Infectés
@@ -21,7 +23,8 @@ public class SEIREvo extends SEIR {
      * @param tempsSimulation Temps de la simulation en Jours
      * @param n               Taux de naissance
      * @param u               Taux de mort naturelle
-     */
+     *//*
+
     public SEIREvo(int S, int E, int I, int R, float beta, float alpha, float gamma, float n, float u, int tempsSimulation) {
         super(S, E, I, R, beta, alpha, gamma, tempsSimulation);
         this.u = u;
@@ -80,3 +83,4 @@ public class SEIREvo extends SEIR {
         this.u = u;
     }
 }
+*/
