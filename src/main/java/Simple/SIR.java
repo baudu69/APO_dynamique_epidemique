@@ -20,9 +20,7 @@ public class SIR {
     private int tempsSimulation;
 
     /**
-     * @param S Taux de personnes saines
      * @param I Taux de personnes Infectés
-     * @param R Taux de personnes guéris ou mortes
      * @param beta Probabilité d'infecter quelq'un
      * @param gamma probabilité de ne plus être infecté
      * @param tempsSimulation Temps de la simulation en Jours

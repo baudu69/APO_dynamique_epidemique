@@ -68,7 +68,7 @@ public class genererExcel {
 
 
     }
-    public static void SEIEVO(ArrayList<Integer> S, ArrayList<Integer> I, ArrayList<Integer> R) {
+    public static void SEIEVO(ArrayList<Float> S, ArrayList<Float> E, ArrayList<Float> I, ArrayList<Float> R) {
 
 
 
@@ -90,17 +90,24 @@ public class genererExcel {
                 myFirstSheet.addCell(number);
             }
 
-            label = new Label(1, 0, "I", cFormat);
+            label = new Label(1, 0, "E", cFormat);
             myFirstSheet.addCell(label);
-            for (int i = 1; i < I.size(); i++) {
-                Number number = new Number(1, i, I.get(i - 1));
+            for (int i = 1; i < S.size(); i++) {
+                Number number = new Number(1, i, E.get(i - 1));
                 myFirstSheet.addCell(number);
             }
 
-            label = new Label(2, 0, "R", cFormat);
+            label = new Label(2, 0, "I", cFormat);
+            myFirstSheet.addCell(label);
+            for (int i = 1; i < I.size(); i++) {
+                Number number = new Number(2, i, I.get(i - 1));
+                myFirstSheet.addCell(number);
+            }
+
+            label = new Label(3, 0, "R", cFormat);
             myFirstSheet.addCell(label);
             for (int i = 1; i < R.size(); i++) {
-                Number number = new Number(2, i, R.get(i - 1));
+                Number number = new Number(3, i, R.get(i - 1));
                 myFirstSheet.addCell(number);
             }
 
