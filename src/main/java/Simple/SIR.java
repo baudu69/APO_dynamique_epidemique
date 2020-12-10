@@ -1,3 +1,5 @@
+package Simple;
+
 import java.util.ArrayList;
 
 public class SIR {
@@ -41,14 +43,14 @@ public class SIR {
      * Effectue la simulation
      */
     private void simuler() {
-        for (int temps=0; temps<tempsSimulation; temps++) {
-            int nbPersonnesDeSaI = (int) (beta*S.get(temps)*I.get(temps));
-            if (nbPersonnesDeSaI > S.get(temps)) nbPersonnesDeSaI = S.get(temps);
-            int nbPersonnesDeIaR = (int) (gamma*I.get(temps));
+        for (int temps=0; temps<getTempsSimulation(); temps++) {
+            int nbPersonnesDeSaI = (int) (getBeta()*getS().get(temps)*getI().get(temps));
+            if (nbPersonnesDeSaI > getS().get(temps)) nbPersonnesDeSaI = getS().get(temps);
+            int nbPersonnesDeIaR = (int) (getGamma()*getI().get(temps));
 
-            S.add((S.get(temps) - nbPersonnesDeSaI));
-            I.add((I.get(temps) + nbPersonnesDeSaI - nbPersonnesDeIaR));
-            R.add((R.get(temps) + nbPersonnesDeIaR));
+            getS().add((getS().get(temps) - nbPersonnesDeSaI));
+            getI().add((getI().get(temps) + nbPersonnesDeSaI - nbPersonnesDeIaR));
+            getR().add((getR().get(temps) + nbPersonnesDeIaR));
         }
     }
 
@@ -58,9 +60,10 @@ public class SIR {
     public ArrayList<ArrayList<Integer>> LancerSimulation() {
         simuler();
         ArrayList<ArrayList<Integer>> listeValeurs = new ArrayList<>();
-        listeValeurs.add(S);
-        listeValeurs.add(I);
-        listeValeurs.add(R);
+        listeValeurs.add(getS());
+        listeValeurs.add(getI());
+        listeValeurs.add(getR());
+        genererExcel.SIR(getS(), getI(), getR());
         return listeValeurs;
     }
 
