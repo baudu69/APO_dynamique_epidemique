@@ -1,4 +1,4 @@
-package Simple;
+package Taux;
 
 import java.util.ArrayList;
 
