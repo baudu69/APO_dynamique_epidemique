@@ -12,13 +12,19 @@ public class SIR {
     //Nbr de personnes guéris ou mortes
     private ArrayList<Personne> R;
 
+    //Liste de toutes les Personnes
     private ArrayList<Personne> lesPersonnes;
 
+    //Liste du nombre de personnes Saines sur la durée
     private ArrayList<Integer> nbS;
+
+    //Liste du nombre de personnes Infecté sur la durée
     private ArrayList<Integer> nbI;
+
+    //Liste du nombre de personnes Rétabli sur la durée
     private ArrayList<Integer> nbR;
 
-    //Probabilité d'infecter quelq'un
+    //Nombre d'interaction par personne avec les gens sur la même case
     private float nbrInteractions;
 
     //Probabilité d'infecter quelq'un
@@ -30,9 +36,13 @@ public class SIR {
     //Temps de la simulation en Jours
     private int tempsSimulation;
 
+    //Jour actuel de la simulation
     private int jourActuel;
 
+
     /**
+     * @param nbPersonnes Nombre de personne de la simulation
+     * @param nbrInteractions Nombre d'interaction par personne avec les gens sur la même case
      * @param beta Probabilité d'infecter quelq'un
      * @param gamma probabilité de ne plus être infecté
      * @param tempsSimulation Temps de la simulation en Jours
@@ -58,7 +68,12 @@ public class SIR {
     }
 
 
-    private void compter() {
+    /**
+     * Remet chaque personne dans sa catégorie respective (S, I, R)
+     * Compte les personne dans chaque catégories et les ajoute au décomte
+     * total (nbS, nbI, nbR)
+     */
+    protected void compter() {
         int nbS = 0;
         for (Personne unePersonne: S) {
             nbS++;
@@ -80,14 +95,20 @@ public class SIR {
         this.lesPersonnes.addAll(R);
     }
 
-    private void incrSimu() {
+    /**
+     * Incrémente la simulation d'un jour
+     */
+    protected void incrSimu() {
         infection();
         retablissement();
         compter();
         this.jourActuel++;
     }
 
-    private void infection() {
+    /**
+     * Gère les infections des personne de la simulation
+     */
+    protected void infection() {
         ArrayList<Personne> lesInfectes = new ArrayList<>(I);
         for (Personne unInfecte: lesInfectes) {
             for (int i = 0; i < nbrInteractions; i++) {
@@ -100,7 +121,10 @@ public class SIR {
         }
     }
 
-    private void retablissement() {
+    /**
+     * Gère le rétablissement des personnes de la simulation
+     */
+    protected void retablissement() {
         ArrayList<Personne> lesInfectes = new ArrayList<>(I);
         for (Personne unInfecte: lesInfectes) {
             if (unInfecte.retablissement(gamma)) {
@@ -111,9 +135,9 @@ public class SIR {
     }
 
     /**
-     * Effectue la simulation
+     * Effectue la simulation complète
      */
-    private void simuler() {
+    protected void simuler() {
         compter();
         this.jourActuel++;
         while (jourActuel < tempsSimulation) {
@@ -131,10 +155,18 @@ public class SIR {
         return listeValeurs;
     }
 
+    /**
+     * @param max Le maximum pouvant être atteint
+     * @return le nombre random généré
+     */
     protected int random(int max) {
         return ((int) (Math.random() * max));
     }
 
+
+    /**
+     * Partie GETTER et SETTER
+     */
 
     public ArrayList<Personne> getS() {
         return S;
