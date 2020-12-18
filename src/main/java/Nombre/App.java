@@ -24,6 +24,8 @@ public class App extends JFrame {
     private JLabel lbl_gamma;
     private JLabel lbl_tempsSimulation;
 
+    private JLabel lbl_chargement;
+
 
     public App(){
         super();
@@ -31,7 +33,7 @@ public class App extends JFrame {
     }
     private void build(){
         setTitle("Simulation Evolution d'une Epidemie"); //On donne un titre à l'application
-        setSize(800,800); //On donne une taille à notre fenêtre
+        setSize(420,300); //On donne une taille à notre fenêtre
         setLocationRelativeTo(null); //On centre la fenêtre sur l'écran
         setResizable(false); //On interdit la redimensionnement de la fenêtre
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit à l'application de se fermer lors du clic sur la croix
@@ -102,6 +104,9 @@ public class App extends JFrame {
 
         panel.add(bouton);
 
+        setLbl_chargement(new JLabel());
+        panel.add(getLbl_chargement());
+
         init();
 
         return panel;
@@ -124,7 +129,7 @@ public class App extends JFrame {
         listeMesures.add(masque);
         listeMesures.add(quarantaine);
         listeMesures.add(vaccination);
-        Grille uneGrille = new Grille(Integer.parseInt(strTaille), Integer.parseInt(strNbPers), Integer.parseInt(strNbrInter), Float.parseFloat(strAlpha), Float.parseFloat(strBeta), Float.parseFloat(strGamma), Integer.parseInt(strTempsSimu), listeMesures);
+        Grille uneGrille = new Grille(this, Integer.parseInt(strTaille), Integer.parseInt(strNbPers), Integer.parseInt(strNbrInter), Float.parseFloat(strAlpha), Float.parseFloat(strBeta), Float.parseFloat(strGamma), Integer.parseInt(strTempsSimu), listeMesures);
         uneGrille.LancerSimulationComplete();
         ArrayList<ArrayList<Integer>> lesResultats = uneGrille.getLesResultats();
         Graphique chart = new Graphique("Evo" , "Evo", lesResultats);
@@ -133,6 +138,13 @@ public class App extends JFrame {
         chart.setVisible( true );
     }
 
+    public JLabel getLbl_chargement() {
+        return lbl_chargement;
+    }
+
+    public void setLbl_chargement(JLabel lbl_chargement) {
+        this.lbl_chargement = lbl_chargement;
+    }
 }
 
 class GetAction extends AbstractAction {

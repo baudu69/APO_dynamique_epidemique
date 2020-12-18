@@ -22,12 +22,14 @@ public class Grille {
 
     private ArrayList<ArrayList<Integer>> parametre;
 
+    private App fenetre;
+
     private boolean confinement;
     private boolean masque;
     private boolean quarantaine;
     private boolean vaccination;
 
-    public Grille(int taille, int nbPersonnes, int nbrInteractions, float alpha, float beta, float gamma, int tempsSimulation, float n, float u, ArrayList<ArrayList<Integer>> parametre) {
+    public Grille(App fenetre, int taille, int nbPersonnes, int nbrInteractions, float alpha, float beta, float gamma, int tempsSimulation, float n, float u, ArrayList<ArrayList<Integer>> parametre) {
         this.taille = taille;
         this.laGrille = new ArrayList<>();
         for (int i = 0; i < taille; i++) {
@@ -49,9 +51,11 @@ public class Grille {
         this.masque = false;
         this.quarantaine = false;
         this.vaccination = false;
+
+        this.fenetre=fenetre;
     }
 
-    public Grille(int taille, int nbPersonnes, int nbrInteractions, float alpha, float beta, float gamma, int tempsSimulation, ArrayList<ArrayList<Integer>> parametre) {
+    public Grille(App fenetre, int taille, int nbPersonnes, int nbrInteractions, float alpha, float beta, float gamma, int tempsSimulation, ArrayList<ArrayList<Integer>> parametre) {
         this.taille = taille;
         this.laGrille = new ArrayList<>();
         for (int i = 0; i < taille; i++) {
@@ -73,6 +77,8 @@ public class Grille {
         this.masque = false;
         this.quarantaine = false;
         this.vaccination = false;
+
+        this.fenetre = fenetre;
     }
 
     public void initSimu() {
@@ -96,7 +102,7 @@ public class Grille {
                     mouvementPersonne(i, j);
                 }
             }
-            System.out.println("Jour " + this.jourActuel);
+            fenetre.getLbl_chargement().setText("Chargement : " + jourActuel + " jours");
             jourActuel++;
         }
     }
