@@ -15,10 +15,19 @@ public class Grille {
     //Taux d'échange avec une case voisine
     private float tauxEchange = 0.1f;
 
+    private float tauxVaccinationParJour = 0.2f;
+
     //Grille Totale
     private ArrayList<ArrayList<SEIR>> laGrille;
 
-    public Grille(int taille, int nbPersonnes, int nbrInteractions, float alpha, float beta, float gamma, int tempsSimulation, float n, float u) {
+    private ArrayList<ArrayList<Integer>> parametre;
+
+    private boolean confinement;
+    private boolean masque;
+    private boolean quarantaine;
+    private boolean vaccination;
+
+    public Grille(int taille, int nbPersonnes, int nbrInteractions, float alpha, float beta, float gamma, int tempsSimulation, float n, float u, ArrayList<ArrayList<Integer>> parametre) {
         this.taille = taille;
         this.laGrille = new ArrayList<>();
         for (int i = 0; i < taille; i++) {
@@ -33,9 +42,16 @@ public class Grille {
 
         this.nbJoursSimulation = tempsSimulation;
         this.jourActuel = 0;
+
+        this.parametre = parametre;
+
+        this.confinement = false;
+        this.masque = false;
+        this.quarantaine = false;
+        this.vaccination = false;
     }
 
-    public Grille(int taille, int nbPersonnes, int nbrInteractions, float alpha, float beta, float gamma, int tempsSimulation) {
+    public Grille(int taille, int nbPersonnes, int nbrInteractions, float alpha, float beta, float gamma, int tempsSimulation, ArrayList<ArrayList<Integer>> parametre) {
         this.taille = taille;
         this.laGrille = new ArrayList<>();
         for (int i = 0; i < taille; i++) {
@@ -50,6 +66,13 @@ public class Grille {
 
         this.nbJoursSimulation = tempsSimulation;
         this.jourActuel = 0;
+
+        this.parametre = parametre;
+
+        this.confinement = false;
+        this.masque = false;
+        this.quarantaine = false;
+        this.vaccination = false;
     }
 
     public void initSimu() {
@@ -65,6 +88,8 @@ public class Grille {
     public void LancerSimulationComplete() {
         initSimu();
         while(jourActuel < nbJoursSimulation) {
+            this.CheckMesures();
+            this.Vacciner();
             for (int i = 0; i < taille; i++) {
                 for (int j = 0; j < taille; j++) {
                     laGrille.get(i).get(j).incrSimu();
@@ -73,6 +98,51 @@ public class Grille {
             }
             System.out.println("Jour " + this.jourActuel);
             jourActuel++;
+        }
+    }
+
+    public void Vacciner() {
+        if (this.vaccination) {
+            for (ArrayList<SEIR> uneLigne : laGrille) {
+                for (SEIR uneSimu : uneLigne) {
+                    for (int i = 0; i <uneSimu.getS().size() ; i++) {
+                        Personne unePersonne = uneSimu.getS().get(i);
+                        if (chance(tauxVaccinationParJour)) {
+                            unePersonne.setStatus("R");
+                            uneSimu.getS().remove(unePersonne);
+                            uneSimu.getR().add(unePersonne);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void test() {
+
+        if ((jourActuel > 2) && (jourActuel%10 == 0)) {
+            ArrayList<ArrayList<Integer>> lesResult = getLesResultats();
+            System.out.println("JeTest");
+            if (lesResult.get(2).get(jourActuel - 1) >= 1000 && !confinement) {
+                System.out.println("AAAAAAAAAAAAAAA");
+                this.confinement = true;
+                this.masque = true;
+                for (ArrayList<SEIR> uneLigne : laGrille) {
+                    for (SEIR uneSimu : uneLigne) {
+                        uneSimu.masquer();
+                    }
+                }
+                Confiner();
+            } else if (lesResult.get(2).get(jourActuel - 1) <= 1000 && confinement){
+                this.confinement = false;
+                this.masque = false;
+                for (ArrayList<SEIR> uneLigne : laGrille) {
+                    for (SEIR uneSimu : uneLigne) {
+                        uneSimu.deMasquer();
+                    }
+                }
+                Deonfiner();
+            }
         }
     }
 
@@ -122,6 +192,51 @@ public class Grille {
             laGrille.get(i).get(j).EchangerPersonne(laGrille.get(i).get(j - 1), 10);
         if (j + 1 <= taille - 1)
             laGrille.get(i).get(j).EchangerPersonne(laGrille.get(i).get(j + 1), 10);
+    }
+
+    private void CheckMesures() {
+        this.parametre.get(0).forEach((jour) -> {
+            if (jour == jourActuel) {
+                System.out.println("Confinement");
+                this.confinement = !this.confinement;
+                if (this.confinement)
+                    this.Confiner();
+                else
+                    this.Deonfiner();
+            }
+        });
+        this.parametre.get(1).forEach((jour) -> {
+            if (jour == jourActuel) {
+                this.masque = !this.masque;
+                if (this.masque)
+                    for (ArrayList<SEIR> uneLigne: laGrille) {
+                        for (SEIR uneSimu: uneLigne) {
+                            uneSimu.masquer();
+                        }
+                    }
+                else
+                    for (ArrayList<SEIR> uneLigne: laGrille) {
+                        for (SEIR uneSimu: uneLigne) {
+                            uneSimu.deMasquer();
+                        }
+                    }
+            }
+        });
+        this.parametre.get(2).forEach((jour) -> {
+            if (jour == jourActuel) {
+                this.quarantaine = !this.quarantaine;
+                for (ArrayList<SEIR> uneLigne: laGrille) {
+                    for (SEIR uneSimu: uneLigne) {
+                        uneSimu.setQuarantaine(!uneSimu.isQuarantaine());
+                    }
+                }
+            }
+        });
+        this.parametre.get(3).forEach((jour) -> {
+            if (jour == jourActuel) {
+                this.vaccination = true;
+            }
+        });
     }
 
     public void Confiner() {

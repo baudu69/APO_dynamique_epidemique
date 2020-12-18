@@ -39,6 +39,9 @@ public class SIR {
     //Jour actuel de la simulation
     private int jourActuel;
 
+    //Les personnes infectes sont en quarantaines
+    private boolean quarantaine;
+
 
     /**
      * @param nbPersonnes Nombre de personne de la simulation
@@ -60,6 +63,7 @@ public class SIR {
         this.gamma = gamma;
         this.tempsSimulation = tempsSimulation;
         this.jourActuel = 0;
+        this.quarantaine = false;
         for (int i = 0; i < nbPersonnes - 1; i++) {
 
             this.S.add(new Personne());
@@ -269,5 +273,13 @@ public class SIR {
 
     public void setJourActuel(int jourActuel) {
         this.jourActuel = jourActuel;
+    }
+
+    public boolean isQuarantaine() {
+        return quarantaine;
+    }
+
+    public void setQuarantaine(boolean quarantaine) {
+        this.quarantaine = quarantaine;
     }
 }
