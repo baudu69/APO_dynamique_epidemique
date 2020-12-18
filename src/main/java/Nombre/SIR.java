@@ -163,6 +163,13 @@ public class SIR {
         return ((int) (Math.random() * max));
     }
 
+    public void masquer() {
+        this.beta /= 10;
+    }
+    public void deMasquer() {
+        this.beta *= 10;
+    }
+
 
     /**
      * Partie GETTER et SETTER

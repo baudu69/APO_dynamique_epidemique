@@ -124,6 +124,14 @@ public class Grille {
             laGrille.get(i).get(j).EchangerPersonne(laGrille.get(i).get(j + 1), 10);
     }
 
+    public void Confiner() {
+        this.tauxEchange /= 10;
+    }
+
+    public void Deonfiner() {
+        this.tauxEchange *= 10;
+    }
+
     private boolean chance(float chance) {
         return (random(100) < (chance * 100));
     }
