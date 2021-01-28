@@ -18,8 +18,8 @@ public class index {
             u : 2.50f
 
          */
-        /*SEIR uneSimu = new SEIR(1000, 10, 0.1f, 0.1f, 0.05f, 365);
-        uneSimu.LancerSimulation();*/
+        //SEIR uneSimu = new SEIREvo(1000, 10, 0.1f, 0.1f, 0.05f, 365, 3.21f, 2.50f);
+        //uneSimu.LancerSimulation();
 
         /*
             1. Confinement

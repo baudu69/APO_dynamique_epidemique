@@ -12,6 +12,7 @@ public class SEIREvo extends SEIR {
     //taux de mortalité par jour naturel pour 100000 habitant
     private float u;
 
+
     /**
      * @param nbPersonnes Nombre de personne de la simulation
      * @param nbrInteractions Nombre d'interaction par personne avec les gens sur la même case
@@ -33,11 +34,11 @@ public class SEIREvo extends SEIR {
      */
     @Override
     public void incrSimu() {
+        naissance();
+        mortNaturelle();
         incuber();
         infection();
         retablissement();
-        naissance();
-        mortNaturelle();
         compter();
         this.setJourActuel(this.getJourActuel()+1);
     }
@@ -46,7 +47,7 @@ public class SEIREvo extends SEIR {
      * Gère les naissances de la simulation
      */
     protected void naissance() {
-        int nbrNaissance = getNbPour100000(n);
+        int nbrNaissance = getPourNPers(n);
         for (int i = 0; i < nbrNaissance; i++) {
             getS().add(new Personne());
         }
@@ -56,26 +57,37 @@ public class SEIREvo extends SEIR {
      * Gère les morts naturelles de la simulation
      */
     protected void mortNaturelle() {
-        int nbrMort = getNbPour100000(u);
-        for (int i = 0; i < nbrMort; i++) {
-            int nbrPersonne = getS().size() + getE().size()+getI().size()+getR().size();
-            Personne unFuturMort = getLesPersonnes().get(random(nbrPersonne));
-            getLesPersonnes().remove(unFuturMort);
-            String status = unFuturMort.getStatus();
-            switch (status) {
-                case "S":
-                    getS().remove(unFuturMort);
-                    break;
-                case "E":
-                    getE().remove(unFuturMort);
-                    break;
-                case "I":
-                    getI().remove(unFuturMort);
-                    break;
-                case "R":
-                    getR().remove(unFuturMort);
-                    break;
+        int nbrMort = getPourNPers(u);
+        if (getLesPersonnes().size() != 0) {
+            for (int i = 0; i < nbrMort; i++) {
+                //System.out.println(getLesPersonnes().size());
+                int rand = random(getLesPersonnes().size() - 1);
+                if (rand == 0) rand=1;
+                //System.out.println("rand= " + rand + " et size = " + getLesPersonnes().size());
+                try {
+                    Personne unFuturMort = getLesPersonnes().get(rand);
 
+                    getLesPersonnes().remove(unFuturMort);
+                    String status = unFuturMort.getStatus();
+                    switch (status) {
+                        case "S":
+                            getS().remove(unFuturMort);
+                            break;
+                        case "E":
+                            getE().remove(unFuturMort);
+                            break;
+                        case "I":
+                            getI().remove(unFuturMort);
+                            break;
+                        case "R":
+                            getR().remove(unFuturMort);
+                            break;
+
+                    }
+                    getLesPersonnes().remove(unFuturMort);
+                } catch (IndexOutOfBoundsException erreur) {
+                    System.out.println("Erreur rand= " + rand + " et size = " + getLesPersonnes().size());
+                }
             }
         }
     }
@@ -108,10 +120,11 @@ public class SEIREvo extends SEIR {
      * @param taux100000 Taux pour 100000habitants
      * @return nbr d'habitants touchés par rapport à cette simulation
      */
-    private int getNbPour100000(float taux100000) {
+    private int getPourNPers(float taux100000) {
         int nbNaissance = 0;
-        float taux = taux100000/100000;
-        for (int i = 0; i < 100000; i++) {
+        int nbPersonne = getLesPersonnes().size();
+        float taux = taux100000/nbPersonne;
+        for (int i = 0; i < nbPersonne; i++) {
             if (chance(taux))
                 nbNaissance++;
         }

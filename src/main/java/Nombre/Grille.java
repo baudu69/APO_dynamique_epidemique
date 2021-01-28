@@ -13,12 +13,12 @@ public class Grille {
     private int jourActuel;
 
     //Taux d'échange avec une case voisine
-    private float tauxEchange = 0.1f;
+    private float tauxEchange;
 
-    private float tauxVaccinationParJour = 0.2f;
+    private float tauxVaccinationParJour;
 
     //Grille Totale
-    private ArrayList<ArrayList<SEIR>> laGrille;
+    private ArrayList<ArrayList<SEIREvo>> laGrille;
 
     private ArrayList<ArrayList<Integer>> parametre;
 
@@ -29,11 +29,13 @@ public class Grille {
     private boolean quarantaine;
     private boolean vaccination;
 
-    public Grille(App fenetre, int taille, int nbPersonnes, int nbrInteractions, float alpha, float beta, float gamma, int tempsSimulation, float n, float u, ArrayList<ArrayList<Integer>> parametre) {
+    public Grille(App fenetre, int taille, int nbPersonnes, int nbrInteractions, float alpha, float beta, float gamma, int tempsSimulation, float n, float u, ArrayList<ArrayList<Integer>> parametre, float tauxEchange, float tauxVaccinationParJour) {
         this.taille = taille;
         this.laGrille = new ArrayList<>();
+        this.tauxEchange = tauxEchange;
+        this.tauxVaccinationParJour = tauxVaccinationParJour;
         for (int i = 0; i < taille; i++) {
-            ArrayList<SEIR> uneLigne = new ArrayList<>();
+            ArrayList<SEIREvo> uneLigne = new ArrayList<>();
             for (int j = 0; j < taille; j++) {
                 uneLigne.add(new SEIREvo(nbPersonnes, nbrInteractions, alpha, beta, gamma, tempsSimulation, n, u));
                 uneLigne.get(j).getI().remove(0);
@@ -53,32 +55,6 @@ public class Grille {
         this.vaccination = false;
 
         this.fenetre=fenetre;
-    }
-
-    public Grille(App fenetre, int taille, int nbPersonnes, int nbrInteractions, float alpha, float beta, float gamma, int tempsSimulation, ArrayList<ArrayList<Integer>> parametre) {
-        this.taille = taille;
-        this.laGrille = new ArrayList<>();
-        for (int i = 0; i < taille; i++) {
-            ArrayList<SEIR> uneLigne = new ArrayList<>();
-            for (int j = 0; j < taille; j++) {
-                uneLigne.add(new SEIR(nbPersonnes, nbrInteractions, alpha, beta, gamma, tempsSimulation));
-                uneLigne.get(j).getI().remove(0);
-            }
-            laGrille.add(uneLigne);
-        }
-        laGrille.get(0).get(0).getI().add(new Personne("I"));
-
-        this.nbJoursSimulation = tempsSimulation;
-        this.jourActuel = 0;
-
-        this.parametre = parametre;
-
-        this.confinement = false;
-        this.masque = false;
-        this.quarantaine = false;
-        this.vaccination = false;
-
-        this.fenetre = fenetre;
     }
 
     public void initSimu() {
@@ -103,13 +79,14 @@ public class Grille {
                 }
             }
             fenetre.getLbl_chargement().setText("Chargement : " + jourActuel + " jours");
+            System.out.println("Jour " + jourActuel);
             jourActuel++;
         }
     }
 
     public void Vacciner() {
         if (this.vaccination) {
-            for (ArrayList<SEIR> uneLigne : laGrille) {
+            for (ArrayList<SEIREvo> uneLigne : laGrille) {
                 for (SEIR uneSimu : uneLigne) {
                     for (int i = 0; i <uneSimu.getS().size() ; i++) {
                         Personne unePersonne = uneSimu.getS().get(i);
@@ -124,33 +101,6 @@ public class Grille {
         }
     }
 
-    public void test() {
-
-        if ((jourActuel > 2) && (jourActuel%10 == 0)) {
-            ArrayList<ArrayList<Integer>> lesResult = getLesResultats();
-            System.out.println("JeTest");
-            if (lesResult.get(2).get(jourActuel - 1) >= 1000 && !confinement) {
-                System.out.println("AAAAAAAAAAAAAAA");
-                this.confinement = true;
-                this.masque = true;
-                for (ArrayList<SEIR> uneLigne : laGrille) {
-                    for (SEIR uneSimu : uneLigne) {
-                        uneSimu.masquer();
-                    }
-                }
-                Confiner();
-            } else if (lesResult.get(2).get(jourActuel - 1) <= 1000 && confinement){
-                this.confinement = false;
-                this.masque = false;
-                for (ArrayList<SEIR> uneLigne : laGrille) {
-                    for (SEIR uneSimu : uneLigne) {
-                        uneSimu.deMasquer();
-                    }
-                }
-                Deonfiner();
-            }
-        }
-    }
 
     public ArrayList<ArrayList<Integer>> getLesResultats() {
         ArrayList<ArrayList<Integer>> lesResults = new ArrayList<>();
@@ -203,7 +153,6 @@ public class Grille {
     private void CheckMesures() {
         this.parametre.get(0).forEach((jour) -> {
             if (jour == jourActuel) {
-                System.out.println("Confinement");
                 this.confinement = !this.confinement;
                 if (this.confinement)
                     this.Confiner();
@@ -215,13 +164,13 @@ public class Grille {
             if (jour == jourActuel) {
                 this.masque = !this.masque;
                 if (this.masque)
-                    for (ArrayList<SEIR> uneLigne: laGrille) {
+                    for (ArrayList<SEIREvo> uneLigne: laGrille) {
                         for (SEIR uneSimu: uneLigne) {
                             uneSimu.masquer();
                         }
                     }
                 else
-                    for (ArrayList<SEIR> uneLigne: laGrille) {
+                    for (ArrayList<SEIREvo> uneLigne: laGrille) {
                         for (SEIR uneSimu: uneLigne) {
                             uneSimu.deMasquer();
                         }
@@ -231,7 +180,7 @@ public class Grille {
         this.parametre.get(2).forEach((jour) -> {
             if (jour == jourActuel) {
                 this.quarantaine = !this.quarantaine;
-                for (ArrayList<SEIR> uneLigne: laGrille) {
+                for (ArrayList<SEIREvo> uneLigne: laGrille) {
                     for (SEIR uneSimu: uneLigne) {
                         uneSimu.setQuarantaine(!uneSimu.isQuarantaine());
                     }

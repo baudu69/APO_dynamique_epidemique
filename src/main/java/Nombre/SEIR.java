@@ -178,9 +178,6 @@ public class SEIR extends SIR {
                     uneSimu.getR().add(unePersGrille1);
                     uneSimu.getLesPersonnes().add(unePersGrille1);
                     break;
-                default:
-                    System.out.println("ALED");
-                    break;
             }
             switch (unePersGrille2.getStatus()) {
                 case "S":
@@ -206,9 +203,6 @@ public class SEIR extends SIR {
                     uneSimu.getLesPersonnes().remove(unePersGrille2);
                     this.getR().add(unePersGrille2);
                     this.getLesPersonnes().add(unePersGrille2);
-                    break;
-                default:
-                    System.out.println("ALED");
                     break;
             }
         }
