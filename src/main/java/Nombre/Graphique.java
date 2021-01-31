@@ -12,9 +12,11 @@ import java.util.ArrayList;
 
 public class Graphique extends ApplicationFrame {
     private ArrayList<ArrayList<Integer>> resultat;
-    public Graphique(String applicationTitle , String chartTitle, ArrayList<ArrayList<Integer>> lesResult) {
+    public String type;
+    public Graphique(String applicationTitle , String chartTitle, ArrayList<ArrayList<Integer>> lesResult, String type) {
         super(applicationTitle);
         this.resultat = lesResult;
+        this.type = type;
         JFreeChart lineChart = ChartFactory.createLineChart(
                 chartTitle,
                 "Jours","Nombre de personnes",
@@ -29,11 +31,22 @@ public class Graphique extends ApplicationFrame {
 
     private DefaultCategoryDataset createDataset( ) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
-        for (int i = 0; i < this.resultat.get(0).size(); i++) {
-            //dataset.addValue( this.resultat.get(0).get(i) , "S" , String.valueOf(i) );
-            dataset.addValue( this.resultat.get(1).get(i) , "E" , String.valueOf(i) );
-            dataset.addValue( this.resultat.get(2).get(i) , "I" , String.valueOf(i) );
-            //dataset.addValue( this.resultat.get(3).get(i) , "R" , String.valueOf(i) );
+        switch (this.type) {
+            case "SIR":
+                for (int i = 0; i < this.resultat.get(0).size(); i++) {
+                    dataset.addValue( this.resultat.get(0).get(i) , "S" , String.valueOf(i) );
+                    dataset.addValue( this.resultat.get(1).get(i) , "I" , String.valueOf(i) );
+                    dataset.addValue( this.resultat.get(2).get(i) , "R" , String.valueOf(i) );
+                }
+                break;
+            case "SEIR":
+                for (int i = 0; i < this.resultat.get(0).size(); i++) {
+                    dataset.addValue( this.resultat.get(0).get(i) , "S" , String.valueOf(i) );
+                    dataset.addValue( this.resultat.get(1).get(i) , "E" , String.valueOf(i) );
+                    dataset.addValue( this.resultat.get(2).get(i) , "I" , String.valueOf(i) );
+                    dataset.addValue( this.resultat.get(3).get(i) , "R" , String.valueOf(i) );
+                }
+                break;
         }
         return dataset;
     }

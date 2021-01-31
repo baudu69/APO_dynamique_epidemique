@@ -1,13 +1,18 @@
 package Nombre;
 
+import Taux.genererExcel;
 import org.jfree.ui.RefineryUtilities;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class App extends JFrame {
+
+    private String modeChoisi;
+
     private JTextField tailleGrille;
     private JTextField nbPerosonnesParSimu;
     private JTextField nbInteractParPers;
@@ -54,12 +59,13 @@ public class App extends JFrame {
     public App(){
         super();
         build();
+        this.modeChoisi="GRILLE";
     }
     private void build(){
         setTitle("Simulation Evolution d'une Epidemie"); //On donne un titre à l'application
         setSize(420,550); //On donne une taille à notre fenêtre
         setLocationRelativeTo(null); //On centre la fenêtre sur l'écran
-        setResizable(false); //On interdit la redimensionnement de la fenêtre
+        setResizable(true); //On interdit la redimensionnement de la fenêtre
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit à l'application de se fermer lors du clic sur la croix
         setContentPane(buildContentPane());
         setVisible(true);
@@ -157,6 +163,28 @@ public class App extends JFrame {
         lbl_dateFinQuaranataine.setText("Jour de fin de la quarantaine");
         lbl_dateDebVaccination.setText("Jour de debut de la vaccination");
 
+        JRadioButton sir = new JRadioButton("SIR");
+        JRadioButton seir = new JRadioButton("SEIR");
+        JRadioButton seirevo = new JRadioButton("SEIREVO");
+        JRadioButton seirevoSpatia = new JRadioButton("SEIREVO Spatialisé");
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(sir);
+        group.add(seir);
+        group.add(seirevo);
+        group.add(seirevoSpatia);
+
+        //setLayout(new FlowLayout(30));
+
+        panel.add(sir);
+        panel.add(seir);
+        panel.add(seirevo);
+        panel.add(seirevoSpatia);
+
+
+
+        //pack();
+
         panel.add(lbl_tailleGrille);
         panel.add(tailleGrille);
         panel.add(lbl_nbPerosonnesParSimu);
@@ -194,6 +222,118 @@ public class App extends JFrame {
         panel.add(dateFinQuaranataine);
         panel.add(lbl_dateDebVaccination);
         panel.add(dateDebVaccination);
+
+        sir.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+
+                tailleGrille.setEnabled(false);
+                nbPerosonnesParSimu.setEnabled(true);
+                nbInteractParPers.setEnabled(true);
+                alpha.setEnabled(false);
+                beta.setEnabled(true);
+                gamma.setEnabled(true);
+                tempsSimulation.setEnabled(true);
+                n.setEnabled(false);
+                u.setEnabled(false);
+                tauxEchange.setEnabled(false);
+                tauxVaccinationParJour.setEnabled(false);
+                dateDebConfinement.setEnabled(false);
+                dateFinConfinement.setEnabled(false);
+                dateDebPortMasque.setEnabled(false);
+                dateFinPortMasque.setEnabled(false);
+                dateDebQuarantaine.setEnabled(false);
+                dateFinQuaranataine.setEnabled(false);
+                dateDebVaccination.setEnabled(false);
+                modeChoisi = "SIR";
+
+            }
+        });
+        seir.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+
+                tailleGrille.setEnabled(false);
+                nbPerosonnesParSimu.setEnabled(true);
+                nbInteractParPers.setEnabled(true);
+                alpha.setEnabled(true);
+                beta.setEnabled(true);
+                gamma.setEnabled(true);
+                tempsSimulation.setEnabled(true);
+                n.setEnabled(false);
+                u.setEnabled(false);
+                tauxEchange.setEnabled(false);
+                tauxVaccinationParJour.setEnabled(false);
+                dateDebConfinement.setEnabled(false);
+                dateFinConfinement.setEnabled(false);
+                dateDebPortMasque.setEnabled(false);
+                dateFinPortMasque.setEnabled(false);
+                dateDebQuarantaine.setEnabled(false);
+                dateFinQuaranataine.setEnabled(false);
+                dateDebVaccination.setEnabled(false);
+                modeChoisi = "SEIR";
+
+            }
+        });
+        seirevo.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+
+                tailleGrille.setEnabled(false);
+                nbPerosonnesParSimu.setEnabled(true);
+                nbInteractParPers.setEnabled(true);
+                alpha.setEnabled(true);
+                beta.setEnabled(true);
+                gamma.setEnabled(true);
+                tempsSimulation.setEnabled(true);
+                n.setEnabled(true);
+                u.setEnabled(true);
+                tauxEchange.setEnabled(false);
+                tauxVaccinationParJour.setEnabled(false);
+                dateDebConfinement.setEnabled(false);
+                dateFinConfinement.setEnabled(false);
+                dateDebPortMasque.setEnabled(false);
+                dateFinPortMasque.setEnabled(false);
+                dateDebQuarantaine.setEnabled(false);
+                dateFinQuaranataine.setEnabled(false);
+                dateDebVaccination.setEnabled(false);
+                modeChoisi = "SEIREVO";
+
+            }
+        });
+
+        seirevoSpatia.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+
+                tailleGrille.setEnabled(true);
+                nbPerosonnesParSimu.setEnabled(true);
+                nbInteractParPers.setEnabled(true);
+                alpha.setEnabled(true);
+                beta.setEnabled(true);
+                gamma.setEnabled(true);
+                tempsSimulation.setEnabled(true);
+                n.setEnabled(true);
+                u.setEnabled(true);
+                tauxEchange.setEnabled(true);
+                tauxVaccinationParJour.setEnabled(true);
+                dateDebConfinement.setEnabled(true);
+                dateFinConfinement.setEnabled(true);
+                dateDebPortMasque.setEnabled(true);
+                dateFinPortMasque.setEnabled(true);
+                dateDebQuarantaine.setEnabled(true);
+                dateFinQuaranataine.setEnabled(true);
+                dateDebVaccination.setEnabled(true);
+                modeChoisi = "GRILLE";
+
+            }
+        });
+
+        seirevoSpatia.setSelected(true);
 
         JButton bouton = new JButton(new GetAction(this, "Lancer la simulation"));
 
@@ -244,10 +384,39 @@ public class App extends JFrame {
         listeMesures.add(masque);
         listeMesures.add(quarantaine);
         listeMesures.add(vaccination);
-        Grille uneGrille = new Grille(this, Integer.parseInt(strTaille), Integer.parseInt(strNbPers), Integer.parseInt(strNbrInter), Float.parseFloat(strAlpha), Float.parseFloat(strBeta), Float.parseFloat(strGamma), Integer.parseInt(strTempsSimu), Float.parseFloat(strN), Float.parseFloat(strU), listeMesures, Float.parseFloat(strTauxEchange), Float.parseFloat(strTauxVaccinationParJour));
-        uneGrille.LancerSimulationComplete();
-        ArrayList<ArrayList<Integer>> lesResultats = uneGrille.getLesResultats();
-        Graphique chart = new Graphique("Evo" , "Evo", lesResultats);
+
+        Graphique chart;
+        ArrayList<ArrayList<Integer>> lesResultats;
+
+        switch (this.modeChoisi) {
+            case "SIR":
+                SIR uneSimuSIR = new SIR(Integer.parseInt(strNbPers), Integer.parseInt(strNbrInter), Float.parseFloat(strBeta), Float.parseFloat(strGamma), Integer.parseInt(strTempsSimu));
+                lesResultats = uneSimuSIR.LancerSimulation();
+                chart = new Graphique("Evo" , "Evo", lesResultats, "SIR");
+                genererExcel.SIRint(lesResultats.get(0), lesResultats.get(1), lesResultats.get(2));
+                break;
+            case "SEIR":
+                SEIR uneSimuSEIR = new SEIR(Integer.parseInt(strNbPers), Integer.parseInt(strNbrInter), Float.parseFloat(strAlpha), Float.parseFloat(strBeta), Float.parseFloat(strGamma), Integer.parseInt(strTempsSimu));
+                lesResultats = uneSimuSEIR.LancerSimulation();
+                chart = new Graphique("Evo" , "Evo", lesResultats, "SEIR");
+                genererExcel.SEIEVOint(lesResultats.get(0), lesResultats.get(1), lesResultats.get(2), lesResultats.get(3));
+                break;
+            case "SEIREVO":
+                SEIREvo uneSimuSEIRevo = new SEIREvo(Integer.parseInt(strNbPers), Integer.parseInt(strNbrInter), Float.parseFloat(strAlpha), Float.parseFloat(strBeta), Float.parseFloat(strGamma), Integer.parseInt(strTempsSimu), Float.parseFloat(strN), Float.parseFloat(strU));
+                lesResultats = uneSimuSEIRevo.LancerSimulation();
+                chart = new Graphique("Evo" , "Evo", lesResultats, "SEIR");
+                genererExcel.SEIEVOint(lesResultats.get(0), lesResultats.get(1), lesResultats.get(2), lesResultats.get(3));
+                break;
+            case "GRILLE":
+                Grille uneGrille = new Grille(this, Integer.parseInt(strTaille), Integer.parseInt(strNbPers), Integer.parseInt(strNbrInter), Float.parseFloat(strAlpha), Float.parseFloat(strBeta), Float.parseFloat(strGamma), Integer.parseInt(strTempsSimu), Float.parseFloat(strN), Float.parseFloat(strU), listeMesures, Float.parseFloat(strTauxEchange), Float.parseFloat(strTauxVaccinationParJour));
+                uneGrille.LancerSimulationComplete();
+                lesResultats = uneGrille.getLesResultats();
+                chart = new Graphique("Evo" , "Evo", lesResultats, "SEIR");
+                genererExcel.SEIEVOint(lesResultats.get(0), lesResultats.get(1), lesResultats.get(2), lesResultats.get(3));
+                break;
+            default:
+                chart = new Graphique("Evo" , "Evo", null, null);
+        }
         chart.pack( );
         RefineryUtilities.centerFrameOnScreen( chart );
         chart.setVisible( true );

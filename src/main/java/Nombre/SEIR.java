@@ -139,10 +139,28 @@ public class SEIR extends SIR {
      * @return Les valeurs de la simulation
      */
     @Override
-    public ArrayList<ArrayList<Float>> LancerSimulation() {
+    public ArrayList<ArrayList<Integer>> LancerSimulation() {
         simuler();
-        ArrayList<ArrayList<Float>> listeValeurs = new ArrayList<>();
-        return listeValeurs;
+        return getLesResultats();
+    }
+
+    public ArrayList<ArrayList<Integer>> getLesResultats() {
+        ArrayList<ArrayList<Integer>> lesResults = new ArrayList<>();
+        ArrayList<Integer> lesS = new ArrayList<>();
+        ArrayList<Integer> lesE = new ArrayList<>();
+        ArrayList<Integer> lesI = new ArrayList<>();
+        ArrayList<Integer> lesR = new ArrayList<>();
+        for (int i = 0; i < getJourActuel(); i++) {
+            lesS.add(this.getNbS().get(i));
+            lesE.add(this.getNbE().get(i));
+            lesI.add(this.getNbI().get(i));
+            lesR.add(this.getNbR().get(i));
+        }
+        lesResults.add(lesS);
+        lesResults.add(lesE);
+        lesResults.add(lesI);
+        lesResults.add(lesR);
+        return lesResults;
     }
 
     /**
